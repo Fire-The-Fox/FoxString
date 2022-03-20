@@ -5,4 +5,4 @@
 ![](https://img.shields.io/badge/license-GNU%20GPL3-blue?style=for-the-badge)
 
 # FoxString
-Custom String implementation in C and C++ <br>
+Custom String implementation in C<br>
