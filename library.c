@@ -1,3 +1,21 @@
+/*
+ * FoxString - Easy to use string implementation in C/C++
+ * Copyright (C) 20022 Fire-The-Fox
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "library.h"
 
 #include <stdio.h>
@@ -5,10 +23,11 @@
 #include <stdbool.h>
 #include <string.h>
 
-FString
-FString_New(char *init)
+
+FoxString
+FoxString_New(char *init)
 {
-    FString new;
+    FoxString new;
 
     if (init == NULL || strcmp(init, "\0") == 0) {
 
@@ -25,40 +44,41 @@ FString_New(char *init)
     return new;
 }
 
+
 void
-FString_Clean(FString *string)
+FoxString_Clean(FoxString *string)
 {
     free(string->data);
     string->size = 0;
 }
 
-FString
-FString_ReCreate(FString *string, char *init)
+FoxString
+FoxString_ReCreate(FoxString *string, char *init)
 {
-    FString_Clean(string);
+    FoxString_Clean(string);
 
-    FString fresh = FString_New(init);
+    FoxString fresh = FoxString_New(init);
 
     return fresh;
 }
 
-FString
-FStringInput()
+FoxString
+FoxStringInput()
 {
     unsigned char bufferChar;
-    FString string = FString_New(NULL);
+    FoxString string = FoxString_New(NULL);
 
     while(true) {
         bufferChar = getchar();
         if (bufferChar == '\n') break;
-        FString_Add(&string, (char) bufferChar);
+        FoxString_Add(&string, (char) bufferChar);
     }
 
     return string;
 }
 
 int
-FString_Count(FString string, char detect)
+FoxString_Count(FoxString string, char detect)
 {
     int found = 0;
 
@@ -70,7 +90,7 @@ FString_Count(FString string, char detect)
 }
 
 int
-FString_Find(FString string, char detect)
+FoxString_Find(FoxString string, char detect)
 {
     int i;
 
@@ -83,7 +103,7 @@ FString_Find(FString string, char detect)
 }
 
 int
-FString_Contains(FString str1, FString str2)
+FoxString_Contains(FoxString str1, FoxString str2)
 {
     char found = false;
 
@@ -112,7 +132,7 @@ FString_Contains(FString str1, FString str2)
 }
 
 int
-FString_Add(FString* string, char character)
+FoxString_Add(FoxString* string, char character)
 {
     string->data = realloc(string->data, string->size + 2);
 
@@ -126,7 +146,7 @@ FString_Add(FString* string, char character)
 }
 
 int
-FString_Connect(FString* mainString, FString sideString)
+FoxString_Connect(FoxString* mainString, FoxString sideString)
 {
     mainString->data = realloc(mainString->data, mainString->size + sideString.size);
 
@@ -141,7 +161,7 @@ FString_Connect(FString* mainString, FString sideString)
 }
 
 int
-FString_Pop(FString* string)
+FoxString_Pop(FoxString* string)
 {
     string->data[string->size-1] = '\0';
     string->size--;
@@ -152,10 +172,11 @@ FString_Pop(FString* string)
     return NO_ISSUE;
 }
 
-FString
-FString_Replace(FString string, char oldChar, char newChar, int count)
+
+FoxString
+FoxString_Replace(FoxString string, char oldChar, char newChar, int count)
 {
-    FString fresh = FString_New(NULL);
+    FoxString fresh = FoxString_New(NULL);
     int replacements = 0;
 
     if (count == NO_LIMIT) count = (int) strlen(string.data);
@@ -163,45 +184,45 @@ FString_Replace(FString string, char oldChar, char newChar, int count)
     for (int i = 0; i < strlen(string.data); i++) {
         if (string.data[i] == oldChar && newChar != '\0' && replacements < count) {
             replacements++;
-            FString_Add(&fresh, newChar);
+            FoxString_Add(&fresh, newChar);
         } else if (string.data[i] == oldChar && newChar == '\0' && replacements < count) {
             i++;
             replacements++;
-            FString_Add(&fresh, string.data[i]);
-        } else FString_Add(&fresh, string.data[i]);
+            FoxString_Add(&fresh, string.data[i]);
+        } else FoxString_Add(&fresh, string.data[i]);
     }
 
     return fresh;
 }
 
 int
-FString_Compare(FString str1, FString str2)
+FoxString_Compare(FoxString str1, FoxString str2)
 {
     if (strcmp(str1.data, str2.data) == 0) return EQUAL;
     return NOT_EQUAL;
 }
 
-FStringArray
-FString_Split(FString string, char splitChar)
+FoxStringArray
+FoxString_Split(FoxString string, char splitChar)
 {
-    FStringArray array = FStringArray_Create();
-    FString tmpString = FString_New(NULL);
+    FoxStringArray array = FoxStringArray_Create();
+    FoxString tmpString = FoxString_New(NULL);
 
     for (int i = 0; i < strlen(string.data); i++) {
         if (string.data[i] == splitChar) {
-            FStringArray_Append(&array, tmpString);
-            tmpString = FString_New(NULL);
-        } else FString_Add(&tmpString, string.data[i]);
+            FoxStringArray_Append(&array, tmpString);
+            tmpString = FoxString_New(NULL);
+        } else FoxString_Add(&tmpString, string.data[i]);
     }
-    FStringArray_Append(&array, tmpString);
+    FoxStringArray_Append(&array, tmpString);
     return array;
 }
 
-FStringArray
-FStringArray_Create()
+FoxStringArray
+FoxStringArray_Create()
 {
-    FStringArray fresh;
-    fresh.array = (FString*) malloc(1 * sizeof(FString));
+    FoxStringArray fresh;
+    fresh.array = (FoxString*) malloc(1 * sizeof(FoxString));
     fresh.size = 0;
     fresh.created = true;
 
@@ -209,12 +230,12 @@ FStringArray_Create()
 }
 
 int
-FStringArray_Append(FStringArray *array, FString string)
+FoxStringArray_Append(FoxStringArray *array, FoxString string)
 {
     if (array->created) {
 
         array->size++;
-        array->array = realloc(array->array, array->size * sizeof(FString));
+        array->array = realloc(array->array, array->size * sizeof(FoxString));
 
         if (array->array == NULL) return OUT_OF_MEMORY;
 
@@ -224,22 +245,22 @@ FStringArray_Append(FStringArray *array, FString string)
     return NO_ISSUE;
 }
 
-FString
-FStringArray_Get(FStringArray array, int index)
+FoxString
+FoxStringArray_Get(FoxStringArray array, int index)
 {
     if (array.created) return array.array[index];
-    else return FString_New(NULL);
+    else return FoxString_New(NULL);
 }
 
 int
-FStringArray_Insert(FStringArray *array, int index, FString string)
+FoxStringArray_Insert(FoxStringArray *array, int index, FoxString string)
 {
     if (array->created) {
 
         if (array->size > index) {
 
             array->size++;
-            array->array = realloc(array->array, array->size * sizeof(FString));
+            array->array = realloc(array->array, array->size * sizeof(FoxString));
 
             if (array->array == NULL) return OUT_OF_MEMORY;
 
@@ -252,7 +273,7 @@ FStringArray_Insert(FStringArray *array, int index, FString string)
 }
 
 int
-FStringArray_Replace(FStringArray *array, int index, FString string)
+FoxStringArray_Replace(FoxStringArray *array, int index, FoxString string)
 {
     if (array->created) array->array[index] = string;
     else return NOT_CREATED;
@@ -260,13 +281,13 @@ FStringArray_Replace(FStringArray *array, int index, FString string)
 }
 
 int
-FStringArray_Remove(FStringArray *array, int index)
+FoxStringArray_Remove(FoxStringArray *array, int index)
 {
     if (array->created) {
 
         for (int i = index; i < array->size; i++) array->array[i] = array->array[i+1];
 
-        array->array = realloc(array->array, (array->size-1) * sizeof(FString));
+        array->array = realloc(array->array, (array->size-1) * sizeof(FoxString));
 
         if (array->array == NULL) return OUT_OF_MEMORY;
 
@@ -276,13 +297,13 @@ FStringArray_Remove(FStringArray *array, int index)
 }
 
 int
-FStringArray_Index(FStringArray array, FString string)
+FoxStringArray_Index(FoxStringArray array, FoxString string)
 {
-    int index = 0, found = false;
+    int index, found = false;
 
     if (array.created) {
         for (index = 0; index < array.size; index++) {
-            if (FString_Compare(string, array.array[index]) == EQUAL) {
+            if (FoxString_Compare(string, array.array[index]) == EQUAL) {
                 found = true;
                 break;
             }
@@ -294,7 +315,7 @@ FStringArray_Index(FStringArray array, FString string)
 }
 
 int
-FStringArray_Clean(FStringArray *array)
+FoxStringArray_Clean(FoxStringArray *array)
 {
     if (array->created) {
 
@@ -306,12 +327,12 @@ FStringArray_Clean(FStringArray *array)
     return NO_ISSUE;
 }
 
-FStringArray
-FStringArray_ReCreate(FStringArray *array)
+FoxStringArray
+FoxStringArray_ReCreate(FoxStringArray *array)
 {
-    FStringArray_Clean(array);
+    FoxStringArray_Clean(array);
 
-    FStringArray fresh = FStringArray_Create();
+    FoxStringArray fresh = FoxStringArray_Create();
 
     return fresh;
 }

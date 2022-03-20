@@ -1,94 +1,109 @@
-//
-// Created by jani on 19. 2. 2022.
-//
+/*
+ * FoxString - Easy to use string implementation in C/C++
+ * Copyright (C) 20022 Fire-The-Fox
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <stdio.h>
 
 #include "library.h"
 
 void
-output(FStringArray array)
+output(FoxStringArray array)
 {
     for (int i = 0; i < array.size; i++) {
-        printf("%s ", FStringArray_Get(array, i).data);
+        printf("%s ", FoxStringArray_Get(array, i).data);
     }
 }
 
 int
 main()
 {
-    FString string = FString_New("I am immutable string, but with FString i will be mutable"), string2;
-    FStringArray array = FString_Split(string, ' ');
+    FoxString string = FoxString_New("I am immutable string, but with FoxString i will be mutable"), string2;
+    FoxStringArray array = FoxString_Split(string, ' ');
 
     printf("\nValue of string is: %s\nSize of string is: %d\n", string.data, string.size);
 
-    printf("\nFound ' ' in string %d times\n", FString_Count(string, ' '));
+    printf("\nFound ' ' in string %d times\n", FoxString_Count(string, ' '));
 
-    printf("'x' is located in string at %d\n", FString_Find(string, 'x'));
+    printf("'x' is located in string at %d\n", FoxString_Find(string, 'x'));
 
-    FString_Add(&string, 'x');
+    FoxString_Add(&string, 'x');
     printf("\nValue of string is: %s\nSize of string is: %d\n", string.data, string.size);
 
-    string2 = FString_Replace(string, ' ', '\0', NO_LIMIT);
+    string2 = FoxString_Replace(string, ' ', '\0', NO_LIMIT);
     printf("\nValue of string is: %s\nSize of string is: %d\n", string2.data, string2.size);
 
     for (int i = 0; i < array.size; i++) {
-        FString tmp = FStringArray_Get(array, i);
+        FoxString tmp = FoxStringArray_Get(array, i);
         printf("\nValue of string is: %s\nSize of string is: %d\n", tmp.data, tmp.size);
     }
 
     printf("\nInput testing: ");
-    printf("Your input: %s\n", FStringInput().data);
+    printf("Your input: %s\n", FoxStringInput().data);
 
-    FStringArray_Insert(&array, 2, FString_New("char pointer"));
+    FoxStringArray_Insert(&array, 2, FoxString_New("char pointer"));
     printf("\nInserted \"char pointer\" into array\nThis is final sentence\n");
 
     output(array);
 
     printf("\n\nRemoving inserted element\n");
-    FStringArray_Remove(&array, 2);
+    FoxStringArray_Remove(&array, 2);
 
     output(array);
 
-    printf("\n\nIndex of \"mutable\" is %d", FStringArray_Index(array, FString_New("mutable")));
+    printf("\n\nIndex of \"mutable\" is %d", FoxStringArray_Index(array, FoxString_New("mutable")));
 
     printf("\n\nreplacing immutable with \"char pointer\"\n");
-    FStringArray_Replace(&array, 2, FString_New("char pointer"));
+    FoxStringArray_Replace(&array, 2, FoxString_New("char pointer"));
 
     output(array);
 
     printf("\n\nI -> You, am -> are, i -> you");
-    FString tmp = FStringArray_Get(array, 0);
-    FString_ReCreate(&tmp, "You");
+    FoxString tmp = FoxStringArray_Get(array, 0);
+    FoxString_ReCreate(&tmp, "You");
 
-    tmp = FStringArray_Get(array, 1);
-    FString_ReCreate(&tmp, "are");
+    tmp = FoxStringArray_Get(array, 1);
+    FoxString_ReCreate(&tmp, "are");
 
-    tmp = FStringArray_Get(array, FStringArray_Index(array, FString_New("i")));
-    FString_ReCreate(&tmp, "you");
+    tmp = FoxStringArray_Get(array, FoxStringArray_Index(array, FoxString_New("i")));
+    FoxString_ReCreate(&tmp, "you");
 
     printf("\n");
     output(array);
 
-    FString_Pop(&string);
+    FoxString_Pop(&string);
     printf("\n\nAdding \"string\" to the end of our first string\n");
-    FString_Connect(&string, FString_New(" string"));
+    FoxString_Connect(&string, FoxString_New(" string"));
 
     printf("%s", string.data);
 
     printf("\n\nDoes \"I am immutable string,\" exist in our first string\nAnswer: %d",
-           FString_Contains(string, FString_New("I am immutable string,")));
+           FoxString_Contains(string, FoxString_New("I am immutable string,")));
 
     printf("\n\nDoes \"I am immutable string.\" exist in our first string\nAnswer: %d",
-           FString_Contains(string, FString_New("I am immutable string.")));
+           FoxString_Contains(string, FoxString_New("I am immutable string.")));
 
-    printf("\n\n\"abc\" in \"xxx a\": %d", FString_Contains(FString_New("xxx a"), FString_New("abc")));
+    printf("\n\n\"abc\" in \"xxx a\": %d", FoxString_Contains(FoxString_New("xxx a"), FoxString_New("abc")));
 
-    FString_Clean(&string);
-    FString_Clean(&string2);
+    FoxString_Clean(&string);
+    FoxString_Clean(&string2);
 
-    FString_Clean(&tmp);
+    FoxString_Clean(&tmp);
 
-    FStringArray_Clean(&array);
+    FoxStringArray_Clean(&array);
 
     return 0;
 }

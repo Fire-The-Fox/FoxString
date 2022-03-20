@@ -1,14 +1,44 @@
-//
-// Created by jani on 22. 2. 2022.
-//
+/*
+ * FoxString - Easy to use string implementation in C/C++
+ * Copyright (C) 20022 Fire-The-Fox
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "library.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <ctype.h>
 
+FoxString::FoxString(char *init) {
+    if (init == nullptr || init == NULL | strcmp(init, "\0") == 0) {
+        this->data = (char*) malloc(1);
+        *(this->data+0) = '\0';
+        this->size = 0;
+    } else {
+        this->data = (char*) malloc(strlen(init));
+        strcpy(this->data, init);
+        this->size = strlen(this->data);
+    }
+}
+
+
+[[deprecated("Use new FoxString(''); instead")]]
 int
-FString::New(char *init)
+FoxString::New(char *init)
 {
     if (init == nullptr || init == NULL | strcmp(init, "\0") == 0) {
         this->data = (char*) malloc(1);
@@ -26,7 +56,7 @@ FString::New(char *init)
 }
 
 int
-FString::Clean()
+FoxString::Clean()
 {
     free(this->data);
     this->size = 0;
@@ -34,19 +64,24 @@ FString::Clean()
 }
 
 int
-FString::ReCreate(char *init)
+FoxString::ReCreate(char *init)
 {
     this->Clean();
 
-    if (this->New(init) == OUT_OF_MEMORY) {
+    FoxString temp = *new FoxString(init);
+
+    if (temp.data == NULL) {
         return OUT_OF_MEMORY;
     }
+
+    strcpy(this->data, temp.data);
+    this->size = temp.size;
 
     return NO_ISSUE;
 }
 
 int
-FString::Add(char character)
+FoxString::Add(char character)
 {
     this->data = (char*) realloc(this->data, this->size + 2);
 
@@ -60,7 +95,7 @@ FString::Add(char character)
 }
 
 int
-FString::Count(char detect) const
+FoxString::Count(char detect) const
 {
     int found = 0;
 
@@ -72,7 +107,7 @@ FString::Count(char detect) const
 }
 
 int
-FString::Find(char detect) const
+FoxString::Find(char detect) const
 {
     int index;
 
@@ -85,7 +120,7 @@ FString::Find(char detect) const
 }
 
 int
-FString::Contains(FString string) const
+FoxString::Contains(FoxString string) const
 {
     char found = false; // saving memory
     for (int i = 0; i < this->size; i++) {
@@ -115,7 +150,7 @@ FString::Contains(FString string) const
 }
 
 int
-FString::Connect(FString string)
+FoxString::Connect(FoxString string)
 {
     this->data = (char*) realloc(this->data, this->size + string.size + 1);
 
@@ -129,43 +164,44 @@ FString::Connect(FString string)
     return NO_ISSUE;
 }
 
-int
-FString::Pop()
+char
+FoxString::Pop()
 {
+	char removed = this->data[this->size - 1];
+	
     this->data[this->size - 1] = '\0';
     this->size--;
     this->data = (char*) realloc(this->data, this->size);
 
     if (this->data == NULL) return OUT_OF_MEMORY;
 
-    return NO_ISSUE;
+    return removed;
 }
 
 int
-FString::Replace(char* oldString, char* newString, int count)
+FoxString::Replace(FoxString oldString, FoxString newString, int count)
 {
-    FString tmp;
-    tmp.New(NULL);
+    FoxString tmp = *new FoxString(NULL);
     int replacements = 0;
 
     if (count == NO_LIMIT) count = (int) this->size;
     for (int i = 0; i < this->size; i++) {
-        if (this->data[i] == oldString[0]) {
+        if (this->data[i] == oldString.data[0]) {
             char mistake = false;
 
-            if (i + strlen(oldString) > this->size) mistake = true;
+            if (i + strlen(oldString.data) > this->size) mistake = true;
 
-            for (int j = 0; j < strlen(oldString) && !mistake; j++) {
-                if (this->data[i+j] != oldString[j]) {
+            for (int j = 0; j < strlen(oldString.data) && !mistake; j++) {
+                if (this->data[i+j] != oldString.data[j]) {
                     mistake = true;
                     break;
                 }
             }
 
             if (!mistake && replacements < count) {
-                for (int j = 0; j < strlen(newString); j++) tmp.Add(newString[j]);
+                for (int j = 0; j < strlen(newString.data); j++) tmp.Add(newString.data[j]);
                 replacements++;
-                i += (int) strlen(oldString) - 1;
+                i += (int) strlen(oldString.data) - 1;
 
             } else if (replacements >= count) {
                 tmp.Add(this->data[i]);
@@ -183,23 +219,54 @@ FString::Replace(char* oldString, char* newString, int count)
 
     strcpy(this->data, tmp.data);
 
+    oldString.Clean();
+    newString.Clean();
+    tmp.Clean();
+
     return NO_ISSUE;
 }
 
 int
-FString::Compare(FString string)
+FoxString::Compare(FoxString string)
 {
     if (strcmp(this->data, string.data) == 0) return EQUAL;
     return NOT_EQUAL;
 }
 
-FString
-FStringInput()
+void
+FoxString::Upper()
+{
+	for (int i = 0; i < this->size; i++) this->data[i] = toupper(this->data[i]);
+}
+
+void
+FoxString::Lower()
+{
+	for (int i = 0; i < this->size; i++) this->data[i] = tolower(this->data[i]);
+}
+
+void
+FoxString::Capitalize()
+{
+	for (int i = 0; i < this->size; i++) {
+		if (i == 0) this->data[0] = toupper(this->data[0]);
+		else this->data[i] = tolower(this->data[i]);
+	}
+}
+
+FoxString
+FoxString::Copy()
+{
+    FoxString fresh = *new FoxString(this->data);
+
+    return fresh;
+}
+
+FoxString
+FoxStringInput()
 {
     unsigned char bufferChar;
-    FString string;
-
-    string.New(nullptr);
+    FoxString string = *new FoxString(NULL);
 
     while(true) {
         bufferChar = getchar();

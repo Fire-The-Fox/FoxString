@@ -1,3 +1,21 @@
+/*
+ * FoxString - Easy to use string implementation in C/C++
+ * Copyright (C) 20022 Fire-The-Fox
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of  MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef FOXSTRING_LIBRARY_H
 #define FOXSTRING_LIBRARY_H
 
@@ -13,87 +31,90 @@
 typedef struct {
     char *data;
     unsigned int size;
-} FString;
+} FoxString;
 
 typedef struct {
-    FString *array;
+    FoxString *array;
     int size;
     char created; // using as much little memory as possible
-} FStringArray;
+} FoxStringArray;
 
-FString
-FString_New(char *init);
+FoxString
+FoxString_New(char *init);
 
 void
-FString_Clean(FString *string);
+FoxString_Clean(FoxString *string);
 
-FString
-FString_ReCreate(FString *string, char *init);
+FoxString
+FoxString_ReCreate(FoxString *string, char *init);
 
-FString
-FStringInput();
-
-int
-FString_Count(FString string, char detect);
+FoxString
+FoxStringInput();
 
 int
-FString_Find(FString string, char detect);
+FoxString_Count(FoxString string, char detect);
 
 int
-FString_Contains(FString str1, FString str2);
+FoxString_Find(FoxString string, char detect);
 
 int
-FString_Add(FString* string, char character);
+FoxString_Contains(FoxString str1, FoxString str2);
 
 int
-FString_Pop(FString* string);
+FoxString_Add(FoxString* string, char character);
 
 int
-FString_Connect(FString* mainString, FString sideString);
-
-FString
-FString_Replace(FString string, char oldChar, char newChar, int count);
+FoxString_Pop(FoxString* string);
 
 int
-FString_Compare(FString str1, FString str2);
+FoxString_Connect(FoxString* mainString, FoxString sideString);
 
-FStringArray
-FString_Split(FString string, char splitChar);
-
-FStringArray
-FStringArray_Create();
+FoxString
+FoxString_Replace(FoxString string, char oldChar, char newChar, int count);
 
 int
-FStringArray_Append(FStringArray *array, FString string);
+FoxString_Compare(FoxString str1, FoxString str2);
 
-FString
-FStringArray_Get(FStringArray array, int index);
+FoxStringArray
+FoxString_Split(FoxString string, char splitChar);
 
-int
-FStringArray_Insert(FStringArray *array, int index, FString string);
-
-int
-FStringArray_Replace(FStringArray *array, int index, FString string);
+FoxStringArray
+FoxStringArray_Create();
 
 int
-FStringArray_Remove(FStringArray *array, int index);
+FoxStringArray_Append(FoxStringArray *array, FoxString string);
+
+FoxString
+FoxStringArray_Get(FoxStringArray array, int index);
 
 int
-FStringArray_Index(FStringArray array, FString string);
+FoxStringArray_Insert(FoxStringArray *array, int index, FoxString string);
 
 int
-FStringArray_Clean(FStringArray *array);
+FoxStringArray_Replace(FoxStringArray *array, int index, FoxString string);
 
-FStringArray
-FStringArray_ReCreate(FStringArray *array);
+int
+FoxStringArray_Remove(FoxStringArray *array, int index);
+
+int
+FoxStringArray_Index(FoxStringArray array, FoxString string);
+
+int
+FoxStringArray_Clean(FoxStringArray *array);
+
+FoxStringArray
+FoxStringArray_ReCreate(FoxStringArray *array);
 
 #else
 
-class FString {
+class FoxString {
     public:
         char *data;
         unsigned int size;
 
+        explicit FoxString(char *init);
+
+        [[deprecated("Use `new FoxString();` instead")]]
         int
         New(char *init);
 
@@ -113,23 +134,35 @@ class FString {
         Find(char detect) const;
 
         int
-        Contains(FString string) const;
+        Contains(FoxString string) const;
 
         int
-        Connect(FString string);
+        Connect(FoxString string);
 
-        int
+        char
         Pop();
 
         int
-        Replace(char* oldString, char* newString, int count);
+        Replace(FoxString oldString, FoxString newString, int count);
 
         int
-        Compare(FString string);
+        Compare(FoxString string);
+        
+        void
+        Capitalize();
+        
+        void
+        Upper();
+        
+        void
+        Lower();
+
+        FoxString
+        Copy();
 };
 
-FString
-FStringInput();
+FoxString
+FoxStringInput();
 #endif
 
 #endif //FOXSTRING_LIBRARY_H

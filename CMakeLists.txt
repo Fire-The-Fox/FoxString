@@ -5,7 +5,7 @@ project(FoxStringTest C)
 project(FoxStringTestCpp CXX)
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 add_library(FoxString STATIC library.c library.h library.cpp)
 set(LIBRARY_OUTPUT_PATH "../lib/")
