@@ -16,7 +16,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "library.h"
+#include "FoxString.h"
 
 #include <cstdio>
 #include <cstdlib>

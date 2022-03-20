@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 
-#include "library.h"
+#include "FoxString.h"
 
 void
 output(FoxStringArray array)

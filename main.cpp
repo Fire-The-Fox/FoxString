@@ -16,7 +16,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "library.h"
+#include "FoxString.h"
 #include <cstdio>
 
 int
@@ -24,7 +24,7 @@ main()
 {
     FoxString string = *new FoxString((char*)"I am going to be mutable FoxString");
 
-    string.New((char*)"I am going to be mutable FoxString");
+    // string.New((char*)"I am going to be mutable FoxString");
 
     printf("\n%s\n", string.data);
 

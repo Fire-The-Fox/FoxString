@@ -7,7 +7,7 @@ project(FoxStringTestCpp CXX)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(FoxString STATIC library.c library.h library.cpp)
+add_library(FoxString STATIC FoxString.c FoxString.h library.cpp)
 set(LIBRARY_OUTPUT_PATH "../lib/")
 set_target_properties(FoxString PROPERTIES PREFIX "")
 
