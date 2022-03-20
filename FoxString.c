@@ -160,16 +160,15 @@ FoxString_Connect(FoxString* mainString, FoxString sideString)
     return NO_ISSUE;
 }
 
-int
+char
 FoxString_Pop(FoxString* string)
 {
+    char beforePop = string->data[string->size-1];
     string->data[string->size-1] = '\0';
     string->size--;
     string->data = realloc(string->data, string->size);
 
-    if (string->data == NULL) return OUT_OF_MEMORY;
-
-    return NO_ISSUE;
+    return beforePop;
 }
 
 
